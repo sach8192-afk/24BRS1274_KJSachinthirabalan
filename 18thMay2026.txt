@@ -1,0 +1,140 @@
+1.
+
+show databases;
+
+use vitcampus;
+
+show tables from vitcampus;
+
+select * from cse;
+
+desc cse;
+
+ALTER TABLE cse ADD(
+    sphn int8, sphn2 int8
+);
+
+# Will not run due to error - sphn and sphn2 is int but we give str
+insert into cse values (106,"Semi",95,'CSE','SriLanka');
+
+ALTER TABLE cse DROP COLUMN sphn2;
+
+ALTER TABLE cse ADD(
+    sCountry varchar(30) DEFAULT 'INDIA'
+);
+
+ALTER TABLE cse RENAME column 
+    Scountry TO SLocation;
+    
+select * from cse;
+
+2.
+
+show databases;
+
+use vitcampus;
+
+show tables from vitcampus;
+
+CREATE TABLE Worker (
+	WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	FIRST_NAME CHAR(25),
+	LAST_NAME CHAR(25),
+	SALARY INT(15),
+	JOINING_DATE DATETIME,
+	DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker 
+	(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+		(001, 'Monika', 'Arora', 100000, '14-02-20 09.00.00', 'HR'),
+		(002, 'Niharika', 'Verma', 80000, '14-06-11 09.00.00', 'Admin'),
+		(003, 'Vishal', 'Singhal', 300000, '14-02-20 09.00.00', 'HR'),
+		(004, 'Amitabh', 'Singh', 500000, '14-02-20 09.00.00', 'Admin'),
+		(005, 'Vivek', 'Bhati', 500000, '14-06-11 09.00.00', 'Admin'),
+		(006, 'Vipul', 'Diwan', 200000, '14-06-11 09.00.00', 'Account'),
+		(007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
+		(008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
+        
+select * from worker;
+update worker set First_Name='Sachin', last_name='kj' where worker_id=1;
+update worker set salary = salary+3000;
+DELETE FROM worker WHERE worker_id=8;
+
+3.
+
+show databases;
+
+use vitcampus;
+
+start transaction;
+
+create table emp(id int);
+insert into emp values (101);
+select * from emp;
+
+savepoint time15;
+
+insert into emp values (102);
+
+savepoint time16;
+
+select * from emp;
+
+insert into emp values (103);
+savepoint time17;
+
+ROLLBACK to time17;
+
+insert into emp values (104);
+savepoint time18;
+
+Rollback to time17;
+
+select * from emp;
+
+4.
+
+show databases;
+
+use vitcampus;
+
+create table class(id int, name varchar(20));
+
+insert into class values
+(1, 'Monika'),
+(2, 'Sachin'),
+(3, 'Sach'),
+(4, 'Balan'),
+(5, 'Bala');
+
+START TRANSACTION;
+
+UPDATE class SET name = 'Abhijit' WHERE id = '5';
+
+SAVEPOINT A;
+
+INSERT INTO class VALUES(6, 'Chris');
+
+SAVEPOINT B;
+
+INSERT INTO class VALUES(7, 'Bravo');
+
+SAVEPOINT C;
+
+SELECT * FROM class;
+
+rollback to B;
+SELECT * FROM class;
+
+5.
+
+show databases;
+
+use vitcampus;
+
+select * from worker;
+select * from worker where salary<100000;
+select * from worker where salary>100000 and department='admin';
+select * from worker where salary>10000 and department='hr' or department = 'admin';
+select * from worker where (salary>10000 and department='hr') or department = 'admin';
