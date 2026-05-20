@@ -1,0 +1,99 @@
+show databases;
+
+use vitcampus;
+
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) unique not null,
+    FirstName varchar(255) NOT NULL,
+    Age int
+);
+desc persons;
+insert into persons values (101,'V','Jayanth',null);
+select * from persons;
+alter table persons add unique (age);
+alter table persons drop constraint age;
+alter table persons add primary key (id);
+
+drop table persons;
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int
+);
+
+ALTER TABLE Persons	
+ADD CHECK (Age>=18);
+desc persons;
+alter table persons add primary key (id);
+alter table persons drop primary key;
+
+
+CREATE TABLE Persons1 (
+    ID INT NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(255),
+    Age INT,
+    City VARCHAR(255) DEFAULT 'Coimbatore'
+);
+
+DESC Persons1;
+
+CREATE TABLE products (
+    pid INT PRIMARY KEY,
+    pname VARCHAR(100) NOT NULL,
+    prefNo INT NOT NULL UNIQUE
+);
+
+DESC products;
+
+INSERT INTO products 
+VALUES (102, 'furniture', 19930);
+
+SELECT * FROM products;
+
+ALTER TABLE Persons
+ADD PRIMARY KEY (ID);
+
+ALTER TABLE Persons
+DROP PRIMARY KEY;
+
+DROP TABLE products;
+
+CREATE TABLE category (
+    cid INT PRIMARY KEY,
+    cname VARCHAR(100) NOT NULL
+);
+
+INSERT INTO category 
+VALUES 
+(101, 'electronics'),
+(102, 'Home App');
+
+SELECT * FROM category;
+
+CREATE TABLE products (
+    pid INT PRIMARY KEY,
+    pname VARCHAR(100) NOT NULL,
+    cid INT,
+    FOREIGN KEY (cid) REFERENCES category(cid)
+);
+
+DESC products;
+
+INSERT INTO products 
+VALUES (504, 'Power Bank Samsung', 101);
+SELECT * FROM products;
+INSERT INTO products VALUES (505, 'Moblie', 102);
+INSERT INTO products VALUES (506, 'Laptop', 999);
+INSERT INTO products VALUES (507, 'phone', NULL);
+INSERT INTO category VALUES (103, 'Clothing');
+DELETE FROM category WHERE cid = 103;
+DELETE FROM category WHERE cid = 101;
+UPDATE category SET cid = 201 WHERE cid = 101;
+UPDATE products SET cid = 102 WHERE pid = 504;
+SELECT * FROM products;
+UPDATE products SET cid = 999 WHERE pid = 504;
+DELETE FROM products WHERE cid = 102;
+DELETE FROM category WHERE cid = 102;
