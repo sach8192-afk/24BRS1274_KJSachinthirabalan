@@ -1,0 +1,56 @@
+show databases;
+use vitcampus;
+
+drop table products;
+CREATE TABLE products (
+    pid INT PRIMARY KEY,
+    pname VARCHAR(100) NOT NULL,
+    cid INT,
+    FOREIGN KEY (cid) REFERENCES category(cid) on delete cascade
+);
+select * from products;
+INSERT INTO products 
+VALUES (504, 'Power Bank Samsung', 101);
+desc products;
+delete from category where cid=101;
+
+drop table products;
+CREATE TABLE products (
+    pid INT PRIMARY KEY,
+    pname VARCHAR(100) NOT NULL,
+    cid INT,
+    FOREIGN KEY (cid) REFERENCES category(cid) on update cascade
+);
+select * from products;
+INSERT INTO products VALUES (504, 'Power Bank Samsung', 101);
+select * from category;
+INSERT INTO category VALUES 
+(101, 'electronics'),
+(102, 'Home App');
+desc products;
+update category set cid = 201 where cid = 101;
+select * from category;
+select * from products;
+
+select * from worker;
+select count(worker_id) from worker where department='admin' or department='hr';
+select department, count(worker_id) from worker group by department;
+select department, count(worker_id) from worker group by department order by count(worker_id) desc;
+select department, sum(salary) from worker group by department;
+select department, sum(salary) from worker group by department order by sum(salary) asc;
+
+select department, count(worker_id) from worker group by department having count(worker_id)>3 order by count(worker_id) desc;
+SELECT department, sum(salary) from worker group by department having sum(salary)<300000 order by sum(salary) asc;
+
+select * from worker limit 4 offset 3;
+
+create table topper (id int);
+insert into topper values (1),(2);
+select * from worker;
+select * from topper;
+select worker_id, first_name, department from worker where worker_id in (select id from topper);
+
+select department, sum(salary) from worker group by department order by sum(salary) asc limit 2;
+select department, sum(salary) from worker group by department order by sum(salary) asc limit 1 offset 1;
+select * from worker group by department order by salary asc;
+select * from worker w1 where salary = (select distinct salary from worker w2 where w1.department = w2.department order by salary desc limit 1 offset 1);
