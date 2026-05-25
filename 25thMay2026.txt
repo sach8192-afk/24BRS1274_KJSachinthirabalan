@@ -1,0 +1,89 @@
+show dbs
+admin   40.00 KiB
+config  12.00 KiB
+local   68.00 KiB
+use sachin
+already on db sachin
+db
+sachin
+use vit
+switched to db vit
+db.dropDatabase()
+{ ok: 1, dropped: 'vit' }
+show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   68.00 KiB
+yield
+ReferenceError: yield is not defined
+use sachin
+switched to db sachin
+use vit
+switched to db vit
+show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   68.00 KiB
+use sachin
+switched to db sachin
+show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   68.00 KiB
+db.dropDatabase(vit)
+ReferenceError: vit is not defined
+use vit
+switched to db vit
+db.dropDatabase()
+{ ok: 1, dropped: 'vit' }
+use sachin
+switched to db sachin
+db.createCollection("Student")
+{ ok: 1 }
+show collections
+Student
+db.Student.drop()
+true
+show collections
+db.createCollection("Employee")
+{ ok: 1 }
+db.Employee.insert({name:'Sachin', address:'Madurai'})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a140cc24fe846b37333f2ea')
+  }
+}
+db.Employee.insert({name:'Sach', address:'Chennai'})
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a140ccf4fe846b37333f2eb')
+  }
+}
+db.Employee.find()
+{
+  _id: ObjectId('6a140cc24fe846b37333f2ea'),
+  name: 'Sachin',
+  address: 'Madurai'
+}
+{
+  _id: ObjectId('6a140ccf4fe846b37333f2eb'),
+  name: 'Sach',
+  address: 'Chennai'
+}
+db.Employee.find().pretty()
+{
+  _id: ObjectId('6a140cc24fe846b37333f2ea'),
+  name: 'Sachin',
+  address: 'Madurai'
+}
+{
+  _id: ObjectId('6a140ccf4fe846b37333f2eb'),
+  name: 'Sach',
+  address: 'Chennai'
+}
+sachin
+
+
