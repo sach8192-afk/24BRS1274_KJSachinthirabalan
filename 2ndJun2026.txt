@@ -1,0 +1,239 @@
+Code 1 Output
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('1','jinu','jinu@gmail.com')
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('2','jawad','jawad@gmail.com')
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+Sl no -22
+name -jawad2
+email -jawad2@gmail
+---------------
+Sl no -1
+name -jinu
+email -jinu@gmail.com
+---------------
+Sl no -2
+name -jawad
+email -jawad@gmail.com
+---------------
+com.mysql.cj.jdbc.ClientPreparedStatement: update user set sl_no='22',name='jawad2',email='jawad2@gmail' where sl_no='2'
+com.mysql.cj.jdbc.ClientPreparedStatement: delete from user where sl_no='1'
+
+Code 2 
+Main Method
+
+public static void main(String[] args) {
+	CRUD_Test objTest=new CRUD_Test();
+        //insert data
+	objTest.create_data("1", "jinu", "jinu@gmail.com");
+	objTest.create_data("2", "jawad", "jawad@gmail.com");
+        //read data
+	objTest.read_data("2");
+}
+
+
+Output
+
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('1','jinu','jinu@gmail.com')
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('2','jawad','jawad@gmail.com')
+Sl no - 2
+name - jawad
+email - jawad@gmail.com
+
+Code 3
+With update and delete
+Main Method
+public static void main(String[] args) {
+	CRUD_Test objTest=new CRUD_Test();
+    
+	objTest.update_data("2", "22", "jawad2", "jawad2@gmail");
+	objTest.read_data();
+	objTest.delete_data("1");
+	objTest.read_data();
+}
+
+Update Method
+public void update_data(String sl_no,String new_sl_no,String name,String email){
+	DB_Connection obj_DB_Connection=new DB_Connection();
+	Connection connection=obj_DB_Connection.get_connection();
+	PreparedStatement ps=null;
+	try {
+		String query="update user set sl_no=?,name=?,email=? where sl_no=?";
+		ps=connection.prepareStatement(query);
+		ps.setString(1, new_sl_no);
+		ps.setString(2, name);
+		ps.setString(3, email);
+		ps.setString(4, sl_no);
+		System.out.println(ps);
+		ps.executeUpdate();
+	} catch (Exception e) {
+		System.out.println(e);
+	}
+}
+
+Delete Method
+public void delete_data(String sl_no){
+	DB_Connection obj_DB_Connection=new DB_Connection();
+	Connection connection=obj_DB_Connection.get_connection();
+	PreparedStatement ps=null;
+	try {
+		String query="delete from user where sl_no=?";
+		ps=connection.prepareStatement(query);
+		ps.setString(1, sl_no);
+		System.out.println(ps);
+		ps.executeUpdate();
+	} catch (Exception e) {
+		System.out.println(e);
+	}
+
+}
+
+Output
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+com.mysql.cj.jdbc.ClientPreparedStatement: update user set sl_no='22',name='jawad2',email='jawad2@gmail' where sl_no='2'
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+Sl no -1
+name -jinu
+email -jinu@gmail.com
+---------------
+Sl no -22
+name -jawad2
+email -jawad2@gmail
+---------------
+com.mysql.cj.jdbc.ClientPreparedStatement: delete from user where sl_no='1'
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+Sl no -22
+name -jawad2
+email -jawad2@gmail
+---------------
+
+With alter and truncate
+Main Method
+	public static void main(String[] args) {
+
+	    CRUD_Test objTest = new CRUD_Test();
+
+	    objTest.create_data("1", "jinu", "jinu@gmail.com");
+	    objTest.create_data("2", "jawad", "jawad@gmail.com");
+
+	    System.out.println("Before ALTER:");
+	    objTest.read_data();
+
+	    objTest.alter_table();
+
+	    System.out.println("Before TRUNCATE:");
+	    objTest.read_data();
+
+	    objTest.truncate_table();
+
+	    System.out.println("After TRUNCATE:");
+	    objTest.read_data();
+	}
+	
+Alter Method
+public void alter_table() {
+    DB_Connection obj_DB_Connection = new DB_Connection();
+    Connection connection = obj_DB_Connection.get_connection();
+
+    try {
+        String query = "alter table user add phone varchar(15)";
+
+        PreparedStatement ps = connection.prepareStatement(query);
+
+        System.out.println(ps);
+
+        ps.executeUpdate();
+
+        System.out.println("Column added successfully");
+
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+}
+
+Truncate Method
+public void truncate_table() {
+    DB_Connection obj_DB_Connection = new DB_Connection();
+    Connection connection = obj_DB_Connection.get_connection();
+
+    try {
+        String query = "truncate table user";
+
+        PreparedStatement ps = connection.prepareStatement(query);
+
+        System.out.println(ps);
+
+        ps.executeUpdate();
+
+        System.out.println("Table truncated successfully");
+
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+}
+
+Output
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('1','jinu','jinu@gmail.com')
+Executing: com.mysql.cj.jdbc.ClientPreparedStatement: insert into user(sl_no,name,email) values ('2','jawad','jawad@gmail.com')
+Before ALTER:
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+Sl no -22
+name -jawad2
+email -jawad2@gmail
+---------------
+Sl no -1
+name -jinu
+email -jinu@gmail.com
+---------------
+Sl no -2
+name -jawad
+email -jawad@gmail.com
+---------------
+com.mysql.cj.jdbc.ClientPreparedStatement: alter table user add phone varchar(15)
+Column added successfully
+Before TRUNCATE:
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+Sl no -22
+name -jawad2
+email -jawad2@gmail
+---------------
+Sl no -1
+name -jinu
+email -jinu@gmail.com
+---------------
+Sl no -2
+name -jawad
+email -jawad@gmail.com
+---------------
+com.mysql.cj.jdbc.ClientPreparedStatement: truncate table user
+Table truncated successfully
+After TRUNCATE:
+com.mysql.cj.jdbc.ClientPreparedStatement: select * from user
+
+MongoDB Connection
+Code:
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoDBConnection {
+    public static void main(String[] args) {
+        String connectionString = "mongodb://localhost:27017";
+
+        try (MongoClient mongoClient = MongoClients.create(connectionString)) {
+            MongoDatabase database = mongoClient.getDatabase("testdb");
+            System.out.println("Connected successfully to MongoDB!");
+        }
+    }
+}
+
+Output
+
+Exception in thread "main" java.lang.Error: Unresolved compilation problems: 
+	MongoClient cannot be resolved to a type
+	MongoClients cannot be resolved
+	MongoDatabase cannot be resolved to a type
+
+	at aada/aada.MongoDBConnection.main(MongoDBConnection.java:11)
+
