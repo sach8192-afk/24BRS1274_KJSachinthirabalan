@@ -1,0 +1,338 @@
+1. Find all students from the CS department with marks greater than 80.
+Ans:
+db.students.find({dept: "CS", marks: { $gt: 80 }})
+{
+  _id: 1,
+  name: 'Ananya',
+  age: 21,
+  dept: 'CS',
+  marks: 88,
+  grades: [
+    'A',
+    'B',
+    'A'
+  ],
+  address: {
+    city: 'Chennai',
+    pin: '600001'
+  },
+  active: true
+}
+{
+  _id: 3,
+  name: 'Meena',
+  age: 20,
+  dept: 'CS',
+  marks: 95,
+  grades: [
+    'A',
+    'A',
+    'A'
+  ],
+  address: {
+    city: 'Chennai',
+    pin: '600002'
+  },
+  active: true
+}
+
+2. Find students whose marks are between 60 and 85 (inclusive) using $gte and $lte.
+Ans:
+db.students.find({marks: {$gte: 60, $lte: 85}}, {name: 1})
+{
+  _id: 2,
+  name: 'Arjun'
+}
+{
+  _id: 4,
+  name: 'Ravi'
+}
+{
+  _id: 5,
+  name: 'Kavya'
+}
+{
+  _id: 7,
+  name: 'Priya'
+}
+{
+  _id: 9,
+  name: 'Rekha'
+}
+
+3. Find all students who are either from IT or ECE department using $in operator.
+Ans:
+db.students.find({dept: {$in: ["IT", "ECE"]}}, {name: 1})
+{
+  _id: 2,
+  name: 'Arjun'
+}
+{
+  _id: 4,
+  name: 'Ravi'
+}
+{
+  _id: 5,
+  name: 'Kavya'
+}
+{
+  _id: 7,
+  name: 'Priya'
+}
+{
+  _id: 8,
+  name: 'Suresh'
+}
+{
+  _id: 10,
+  name: 'Vijay'
+}
+
+4. Find students NOT in the CS department using $nin and project only name and dept.
+Ans:
+b.students.find({dept: {$nin: ["CS"]}}, {name: 1})
+{
+  _id: 2,
+  name: 'Arjun'
+}
+{
+  _id: 4,
+  name: 'Ravi'
+}
+{
+  _id: 5,
+  name: 'Kavya'
+}
+{
+  _id: 7,
+  name: 'Priya'
+}
+{
+  _id: 8,
+  name: 'Suresh'
+}
+{
+  _id: 10,
+  name: 'Vijay'
+}
+
+5. Find students where the address.city is 'Chennai' using dot notation.
+db.students.find({"address.city": "Chennai"}, {name: 1})
+{
+  _id: 1,
+  name: 'Ananya'
+}
+{
+  _id: 3,
+  name: 'Meena'
+}
+{
+  _id: 7,
+  name: 'Priya'
+}
+
+6. Find total revenue per category using $group and $sum on a computed field (price × sold).
+Ans:
+db.products.aggregate([{$group: {_id: "$category", totalRevenue: {$sum: {$multiply: ["$price", "$sold"]}}}}])
+{
+  _id: 'Books',
+  totalRevenue: 629000
+}
+{
+  _id: 'Electronics',
+  totalRevenue: 16817000
+}
+{
+  _id: 'Furniture',
+  totalRevenue: 612000
+}
+
+7. Use aggregation to find total number of students and average marks per department.
+Ans:
+db.students.aggregate([{$group: {_id: "$dept", totalStudents: { $count: {} }, averageMarks: { $avg: "$marks" }}}])
+{
+  _id: 'IT',
+  totalStudents: 3,
+  averageMarks: 82
+}
+{
+  _id: 'CS',
+  totalStudents: 4,
+  averageMarks: 76.5
+}
+{
+  _id: 'ECE',
+  totalStudents: 3,
+  averageMarks: 61.666666666666664
+}
+
+8. Remove the 'scholarship' field from all students using $unset.
+Ans:
+db.students.updateMany({},{$unset: {scholarship: ""}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 10,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+9. Add a new field 'scholarship' with value false to all CS students using $set.
+Ans:
+db.students.updateMany({dept: "CS"}, {$set: {scholarship: false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+
+10. Increment marks of student with _id:6 by 10 using $inc.
+Ans:
+db.students.updateOne({_id: 6}, {$inc: { marks: 10}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+11. Find the 3rd and 4th highest scoring students using sort, skip, and limit (pagination).
+Ans:
+db.students.find({}, {name: 1}).sort({marks: -1}).skip(2).limit(2)
+{
+  _id: 1,
+  name: 'Ananya'
+}
+{
+  _id: 5,
+  name: 'Kavya'
+}
+
+12. Find employees whose salary is greater than 50000 and experience greater than 5.
+Ans:
+b.employees.find({salary: { $gt: 50000 }, experience: { $gt: 5 }}, {name: 1})
+{
+  _id: ObjectId('6a26bc33b4d6c07f647d0aed'),
+  name: 'Rahul'
+}
+{
+  _id: ObjectId('6a26bc33b4d6c07f647d0aef'),
+  name: 'Karthik'
+}
+
+13. Find employees whose skills array size is greater than 2.
+Ans:
+db.employees.find({skills: {$size: 3}}, {name: 1})
+{
+  _id: ObjectId('6a26bc33b4d6c07f647d0aeb'),
+  name: 'Arun'
+}
+{
+  _id: ObjectId('6a26bc33b4d6c07f647d0aed'),
+  name: 'Rahul'
+}
+{
+  _id: ObjectId('6a26bc33b4d6c07f647d0aef'),
+  name: 'Karthik'
+}
+
+14. Find departments whose average salary is greater than 50000.
+Ans:
+db.employees.aggregate([{$group: {_id: "$department", averageSalary: { $avg: "$salary" }}}, {$match: {averageSalary: { $gt: 50000 }}}])
+{
+  _id: 'IT',
+  averageSalary: 62666.666666666664
+}
+{
+  _id: 'HR',
+  averageSalary: 55000
+}
+
+15. Find minimum salary in each department.
+Ans:
+db.employees.aggregate([{$group: {_id: "$department", minimumSalary: {$min: "$salary"}}}])
+{
+  _id: 'Finance',
+  minimumSalary: 50000
+}
+{
+  _id: 'IT',
+  minimumSalary: 45000
+}
+{
+  _id: 'HR',
+  minimumSalary: 55000
+}
+{
+  _id: 'Marketing',
+  minimumSalary: 42000
+}
+
+16. Rename field city to location.
+Ans:
+db.employees.updateMany({},{$rename: {city: "location"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 6,
+  modifiedCount: 6,
+  upsertedCount: 0
+}
+
+17. Find products where stock is of type Number using $type operator.
+Ans:
+db.products.find({stock: {$type: "number"}}, {name: 1})
+{
+  _id: 101,
+  name: 'Laptop'
+}
+{
+  _id: 102,
+  name: 'Phone'
+}
+{
+  _id: 103,
+  name: 'Headphones'
+}
+{
+  _id: 104,
+  name: 'Desk Chair'
+}
+{
+  _id: 105,
+  name: 'Bookshelf'
+}
+{
+  _id: 106,
+  name: 'Python Book'
+}
+{
+  _id: 107,
+  name: 'Data Science'
+}
+{
+  _id: 108,
+  name: 'Keyboard'
+}
+{
+  _id: 109,
+  name: 'Monitor'
+}
+{
+  _id: 110,
+  name: 'Mouse'
+}
+
+18. Set the active status to true for all inactive students using updateMany and $set.
+Ans:
+db.students.updateMany({active: false}, {$set: {active: true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
